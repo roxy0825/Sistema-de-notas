@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native';
 import React, { useState } from 'react';
-
+  
 export default function App() {
   const [ident, setIdent] = useState('');
   const [nom, setNom] = useState('');
@@ -29,17 +29,19 @@ export default function App() {
 
     const definitiva = notas.reduce((total, nota) => total + nota, 0) / notas.length;
     setDefi(definitiva);
+    let mensaje ="" 
 
     if (definitiva >= 3) {
-      setObs('Aprueba');
+      mensaje ="Aprobada" 
     } else if (definitiva >= 2 && definitiva < 2.94) {
-      setObs('Habilita');
+      mensaje ="Habilitada" 
     } else {
-      setObs('Reprueba');
+      mensaje ="Reprueba" 
     }
+    setObs(mensaje)
 
-    const nota = { ident, nom, asig, nota1, nota2, nota3, defi, obs };
-    setNotasGuardadas([...notasGuardadas, nota]);
+    const nota = { ident, nom, asig, nota1, nota2, nota3, definitiva, mensaje };
+    setNotasGuardadas([nota]);
 
     alert('La nota definitiva se ha calculado correctamente y se ha guardado en la lista de notas');
   };
@@ -58,8 +60,8 @@ export default function App() {
     setNota1(nota.nota1);
     setNota2(nota.nota2);
     setNota3(nota.nota3);
-    setDefi(nota.defi);
-    setObs(nota.obs);
+    setDefi(nota.definitiva);
+    setObs(nota.mensaje);
 
     alert('Se encontraron notas para la identificación ingresada');
   };
@@ -86,54 +88,54 @@ export default function App() {
         <View style={[styles.container, {flex:3}]}>
           <View style={[styles.boxInput]}>
             <Text>Identificacion: </Text>
-            <TextInput placeholder='' style={styles.inputs} onChangeText={ident => setDefi(ident)} value={ident}></TextInput>
+            <TextInput placeholder='' style={styles.inputs} onChangeText={setIdent} value={ident}></TextInput>
           </View>
 
        
           <View style={[styles.boxInput]}>
             <Text>Nombres: </Text>
-            <TextInput placeholder='' style={styles.inputs} onChangeText={nom => setNom(nom)} value={nom}></TextInput>
+            <TextInput placeholder='' style={styles.inputs} onChangeText={setNom} value={nom}></TextInput>
           </View>
 
          
           <View style={[styles.boxInput]}>
             <Text>Asignatura: </Text>
-            <TextInput placeholder='' style={styles.inputs} onChangeText={asig => setAsig(asig)} value={asig}></TextInput>
+            <TextInput placeholder='' style={styles.inputs} onChangeText={setAsig} value={asig}></TextInput>
           </View>
 
           
           <View style={[styles.boxInput]}>
             <Text>Nota Momento 1 (30%): </Text>
-            <TextInput placeholder='' style={styles.inputs} onChangeText={nota1 => setNota1(nota1)} value={nota1}></TextInput>
+            <TextInput placeholder='' style={styles.inputs} onChangeText={setNota1} value={nota1}></TextInput>
           </View>
 
          
           <View style={[styles.boxInput]}>
             <Text>Nota Momento 2 (35%): </Text>
-            <TextInput placeholder='' style={styles.inputs} onChangeText={nota2 => setNota2(nota2)} value={nota2}></TextInput>
+            <TextInput placeholder='' style={styles.inputs} onChangeText={setNota2} value={nota2}></TextInput>
           </View>
 
           
           <View style={[styles.boxInput]}>
             <Text>Nota Momento 3 (35%): </Text>
-            <TextInput placeholder='' style={styles.inputs} onChangeText={nota3 => setNota3(nota3)} value={nota3}></TextInput>
+            <TextInput placeholder='' style={styles.inputs} onChangeText={setNota3} value={nota3}></TextInput>
           </View>
 
           
           <View style={[styles.boxInput]}>
             <Text>Definitiva: </Text>
-            <TextInput style={[styles.inputs]}>{defi.toFixed(1)}</TextInput>
+            <TextInput placeholder='' style={styles.inputs}  value={defi}></TextInput>
           </View>
 
           
           <View style={[styles.boxInput]}>
             <Text>Observacion: </Text>
-            <TextInput placeholder='' style={styles.inputs} onChangeText={obs => setObs(obs)} value={obs}></TextInput>
+            <TextInput placeholder='' style={styles.inputs}  value={obs}></TextInput>
           </View>
 
 
-          <View style={[styles.container,{marginTop:5,flexDirection:"row"}]} onPress={calcularNotaDefinitiva}>
-           <TouchableOpacity style={[styles.buttons,{backgroundColor:"green"}]}>
+          <View style={[styles.container,{marginTop:5,flexDirection:"row"}]}>
+           <TouchableOpacity style={[styles.buttons,{backgroundColor:"green"}]}  onPress={calcularNotaDefinitiva}>
                <Text style={styles.textButtons}>Calcular/Guardar</Text>
            </TouchableOpacity>
 
@@ -184,18 +186,21 @@ const styles = StyleSheet.create({
 
   },
   inputs:{
-    color:'black', 
-   borderRadius:5,
-   padding:10,
-    borderWidth:2,
-    borderColor:'black',
-    textAling:'center',
-    //borderTopWidht:0,
-    //borderEndWidth:0,
-   // borderStartColor:0,
-    //borderBottomColor:'red',
-    //borderBottomWidth:2,
-   // marginBottom:30
+    color: '#555',
+    paddingTop: 5,
+    paddingBottom: 5,
+    borderWidth: 2,
+    borderColor: 'orange',
+    textAlign: 'center',
+    margin: 10,
+    fontSize: 15,
+    outline: 'none',
+    borderTopWidth: 0,
+    borderEndWidth: 0,
+    borderStartWidth: 0,
+    borderBottomColor: 'black',
+    borderBottomWidth: 2,
+    marginBottom: 30
   },
   boxInput:{
     flexDirection:"row",   

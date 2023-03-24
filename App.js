@@ -11,21 +11,25 @@ export default function App() {
   const [defi, setDefi] = useState(0);
   const [obs, setObs] = useState('');
   const [notasGuardadas, setNotasGuardadas] = useState([]);
+  const [guardarTodasNotas, setguardarTodasNotas] = useState([]);
+  const [error, seterror] = useState(false);
+  const [rango, setrango] = useState(false);
 
   const calcularNotaDefinitiva = () => {
     if (ident === '' || nom === '' || asig === '' || nota1 === '' || nota2 === '' || nota3 === '') {
-      alert('Por favor, complete todos los campos');
+     seterror(true)
       return;
     }
-
+    seterror(false)
     const notas = [parseFloat(nota1), parseFloat(nota2), parseFloat(nota3)];
 
     for (let i = 0; i < notas.length; i++) {
       if (isNaN(notas[i]) || notas[i] < 0 || notas[i] > 5) {
-        alert('Las notas deben estar en el rango de 0 a 5');
+        setrango(true)
         return;
       }
     }
+    setrango(false)
 
     const definitiva = notas.reduce((total, nota) => total + nota, 0) / notas.length;
     setDefi(definitiva);
@@ -42,16 +46,18 @@ export default function App() {
 
     const nota = { ident, nom, asig, nota1, nota2, nota3, definitiva, mensaje };
     setNotasGuardadas([nota]);
+    setguardarTodasNotas([...notasGuardadas,nota])
 
-    alert('La nota definitiva se ha calculado correctamente y se ha guardado en la lista de notas');
   };
 
   const buscarNotas = () => {
-    const notas = notasGuardadas.filter(nota => nota.ident === ident);
+    const notas = guardarTodasNotas.filter(nota => nota.ident === ident);
     if (notas.length === 0) {
       alert('No se encontraron notas para la identificación ingresada');
       return;
     }
+
+  
 
     const nota = notas[0];
     setIdent(nota.ident);
@@ -132,6 +138,21 @@ export default function App() {
             <Text>Observacion: </Text>
             <TextInput placeholder='' style={styles.inputs}  value={obs}></TextInput>
           </View>
+
+          {
+            error && (
+              <View style={[styles.boxInput,{marginBottom:30}]}>
+            <Text>todos los campos son regueridos </Text>
+          </View>
+            )
+          }
+             {
+            rango && (
+              <View style={[styles.boxInput,{marginBottom:30}]}>
+            <Text>el rango debe de ser de 0 a 5 </Text>
+          </View>
+            )
+          }
 
 
           <View style={[styles.container,{marginTop:5,flexDirection:"row"}]}>
